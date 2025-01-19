@@ -23,6 +23,10 @@ export class Component extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+
+    this.props[name] = JSON.parse(newValue);
+
     this.onAttributeChanged(name, oldValue, newValue);
     this.#render();
   }
@@ -37,6 +41,7 @@ export class Component extends HTMLElement {
   }
 
   #render() {
+    console.log("render");
     this.shadowRoot.innerHTML = this.template();
   }
 
@@ -48,6 +53,5 @@ export class Component extends HTMLElement {
     }
 
     this.#render();
-    this.onConnectedDom();
   }
 }

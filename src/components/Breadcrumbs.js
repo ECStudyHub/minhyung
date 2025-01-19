@@ -5,12 +5,6 @@ export class Breadcrumbs extends Component {
     return ["items"];
   }
 
-  onAttributeChanged(name, oldValue, newValue) {
-    if (name === "items") {
-      this.props.items = JSON.parse(newValue);
-    }
-  }
-
   template() {
     return `
         <style>
