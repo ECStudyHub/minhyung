@@ -19,6 +19,13 @@ export class App extends Component {
       },
     });
 
+    document.addEventListener("click", (e) => {
+      this.event_manager.triggerEvent("click", e);
+      // e.composedPath에 이벤트가 발생한 요소부터 최상위 요소까지의 경로가 배열로 저장되어 있음
+      // e.composedPath().find를 사용하여 이벤트가 발생한 요소부터 최상위 요소까지의 경로에서
+      // node-item 요소를 찾아내고, 해당 요소의 속성을 가져옴
+    });
+
     // directory 바꾸는 이벤트 상단에서 모두처리
     document.addEventListener("update-directory", (e) => {
       const { header_list } = this.state ?? {};

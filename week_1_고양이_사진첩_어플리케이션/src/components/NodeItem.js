@@ -1,11 +1,14 @@
 import { Component } from "../core/Component.js";
-import { dispatchDirectory, dispatchOpenModal } from "../events/dispatch.js";
+import { updateDirectoryEvent, OpenModalEvent } from "../events/dispatch.js";
 
 export class NodeItem extends Component {
   static get observedAttributes() {
     return ["item_src", "item_name", "item_type", "item_id", "file_path"];
   }
 
+  constructor() {
+    super();
+  }
   template() {
     const { item_name, item_type, item_src } = this.props ?? {};
 
@@ -33,15 +36,16 @@ export class NodeItem extends Component {
   }
 
   onConnectedDom() {
-    this.shadowRoot.addEventListener("click", () => {
+    this.clickEventHandler = (e) => {
       const { item_id, item_name, item_type, file_path } = this.props ?? {};
       // 상위에 디렉토리를 눌렀다는 이벤트 전파
       if (item_type === "DIRECTORY" || item_type === "PREV") {
-        this.shadowRoot.dispatchEvent(
-          dispatchDirectory({
+        this.dispatchEvent(
+          updateDirectoryEvent({
             id: item_id,
             name: item_name,
             type: item_type,
+            target: this,
           })
         );
       }
@@ -50,14 +54,18 @@ export class NodeItem extends Component {
         const base =
           "https://fe-dev-matching-2021-03-serverlessdeploymentbuck-1ooef0cg8h3vq.s3.ap-northeast-2.amazonaws.com/public";
 
-        this.shadowRoot.dispatchEvent(
-          dispatchOpenModal({
+        this.dispatchEvent(
+          OpenModalEvent({
             file_path: `${base}/${file_path}`,
             id: item_id,
           })
         );
       }
-    });
+    };
+    this.addEventListener("click", this.clickEventHandler);
+  }
+  onDisconnectedDom() {
+    this.removeEventListener("click", this.clickEventHandler);
   }
 }
 

@@ -1,13 +1,37 @@
+// import { dispatchEvent } from "../events/EventManager";
+
+import { event_manager } from "../events/EventManager.js";
+
 export class Component extends HTMLElement {
+  event_manager = event_manager;
+
   static get observedAttributes() {
     return [];
   }
+
   constructor(props) {
     super();
     this.attachShadow({ mode: "open" });
     this.state = props?.state;
     this.props = {};
   }
+
+  addEventListener(event_name, callback, options) {
+    // const custom_event = new CustomEvent(event_name, {
+    //   bubbles: true,
+    //   composed: true,
+    //   detail: { target: this, callback },
+    // });
+    this.event_manager.addEventListener(this, event_name, callback, options);
+  }
+
+  // removeEventListener(event_name, callback) {
+  //   this.event_manager.removeEventListener(
+  //     this.shadowRoot,
+  //     event_name,
+  //     callback
+  //   );
+  // }
 
   connectedCallback() {
     this.#render();
@@ -41,7 +65,6 @@ export class Component extends HTMLElement {
   }
 
   #render() {
-    console.log("render");
     this.shadowRoot.innerHTML = this.template();
   }
 

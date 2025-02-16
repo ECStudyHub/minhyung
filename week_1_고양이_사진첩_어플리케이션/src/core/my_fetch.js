@@ -1,4 +1,4 @@
-import { dispatchCloseModal, dispatchOpenModal } from "../events/dispatch.js";
+import { CloseModalEvent, OpenModalEvent } from "../events/dispatch.js";
 
 const MESSAGES = {
   over_max_retry_count: "최대 재시도 횟수를 초과했습니다.",
@@ -39,7 +39,7 @@ export async function my_fetch({
 
 export async function fetch_with_load_process(fetchFunction) {
   const load_image_path = "assets/nyan-cat.gif";
-  const MAX_RETRY_COUNT = 0;
+  const MAX_RETRY_COUNT = 1;
   let retry_count = 0;
 
   const fetching = () => {
@@ -49,7 +49,7 @@ export async function fetch_with_load_process(fetchFunction) {
       max_retry_count: MAX_RETRY_COUNT,
       onBeforeFetch: () => {
         document.dispatchEvent(
-          dispatchOpenModal({
+          OpenModalEvent({
             file_path: load_image_path,
             id: "",
             system_modal: true,
@@ -57,12 +57,12 @@ export async function fetch_with_load_process(fetchFunction) {
         );
       },
       onSuccessFetch: () => {
-        document.dispatchEvent(dispatchCloseModal());
+        document.dispatchEvent(CloseModalEvent());
       },
       onError: ({ retry_count, retry_function }) => {
         if (retry_count >= MAX_RETRY_COUNT) {
           alert(MESSAGES.over_max_retry_count);
-          document.dispatchEvent(dispatchCloseModal());
+          document.dispatchEvent(CloseModalEvent());
           return;
         } else {
           return retry_function();

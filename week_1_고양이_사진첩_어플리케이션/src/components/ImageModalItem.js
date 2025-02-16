@@ -1,5 +1,5 @@
 import { Component } from "../core/Component.js";
-import { dispatchCloseModal } from "../events/dispatch.js";
+import { CloseModalEvent } from "../events/dispatch.js";
 
 export class ImageModalItem extends Component {
   constructor() {
@@ -11,7 +11,7 @@ export class ImageModalItem extends Component {
       }
 
       if (e.key === "Escape") {
-        this.shadowRoot.dispatchEvent(dispatchCloseModal({}));
+        this.dispatchEvent(CloseModalEvent({}));
       }
     });
   }
