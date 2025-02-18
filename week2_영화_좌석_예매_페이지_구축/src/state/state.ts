@@ -1,7 +1,9 @@
 import { MAX_SEAT_NUM } from "./resources/const";
 import { getSeatType } from "./utls";
 
-const global_state: {
+export type SeatType = "EMPTY" | "NORMAL" | "MUSSEUK" | "HANDICAP";
+
+interface GlobalState {
   adult_peolple_num: number;
   child_people_num: number;
   total_people_num: number;
@@ -11,7 +13,9 @@ const global_state: {
     type: SeatType;
   }[];
   is_checked_handicap: boolean;
-} = {
+}
+
+const global_state: GlobalState = {
   adult_peolple_num: 0,
   child_people_num: 0,
   total_people_num: 0,
@@ -23,14 +27,13 @@ const global_state: {
   is_checked_handicap: false,
 };
 
-export type SeatType = "EMPTY" | "NORMAL" | "MUSSEUK" | "HANDICAP";
-export function setGlobalState<T extends keyof typeof global_state>(
+export function setGlobalState<T extends keyof GlobalState>(
   key: T,
-  value: (typeof global_state)[T]
+  value: GlobalState[T]
 ) {
   global_state[key] = value;
 }
 
-export function getGlobalState<T extends keyof typeof global_state>(key: T) {
+export function getGlobalState<T extends keyof GlobalState>(key: T) {
   return global_state[key];
 }
